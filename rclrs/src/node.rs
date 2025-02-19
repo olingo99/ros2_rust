@@ -139,6 +139,12 @@ impl Node {
         Self::builder(context, node_name).build()
     }
 
+    pub fn as_rcl_node_ptr(&self) -> *mut rcl_node_t {
+        // Lock the mutex and get the raw pointer.
+        let mut locked = self.handle.rcl_node.lock().unwrap();
+        &mut *locked as *mut rcl_node_t
+    }
+
     /// Returns the clock associated with this node.
     pub fn get_clock(&self) -> Clock {
         self.time_source.get_clock()
